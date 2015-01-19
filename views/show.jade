@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  h1= title
+  
+  hr
+  h2 Create New Views
+  form(name="view", action="/views", method="post")
+    input(type="text", name="uuid", placeholder="uuid")
+    br
+    input(type="text", name="page", placeholder="page_type")
+    br
+    input(type="text", name="url", placeholder="url")
+    br
+    input(type="submit")
+
+
+  hr
+  h2 See Existing Views
+  ul
+    each view in views
+      li
+        pre=view

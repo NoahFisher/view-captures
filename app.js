@@ -5,14 +5,18 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
+  , view = require('./routes/view') 
   , http = require('http')
   , path = require('path');
 
 var app = express();
 
+// set up database 
 var Mongoose = require('mongoose');
-var db = Mongoose.createConnection('localhost', 'mytestapp');
+var db = Mongoose.createConnection('localhost', 'test_hatch_analytics');
+
+var ViewSchema = require('./models/View.js').ViewSchema;
+var View = db.model('views', ViewSchema);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,9 +34,14 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
 
+// routing
+app.get('/', routes.index);
+app.get('/views', view.index(View));
+app.post('/views', view.addView(View));
+
+
+// start server
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
